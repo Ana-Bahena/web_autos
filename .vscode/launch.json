@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "NovaDriveBackendApplication",
+      "request": "launch",
+      "mainClass": "com.novadrive.backend.NovaDriveBackendApplication",
+      "projectName": "novadrive-backend"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

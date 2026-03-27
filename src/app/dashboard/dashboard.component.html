@@ -1,0 +1,462 @@
+<!-- Dashboard Layout -->
+<div class="dashboard-layout">
+
+    <!-- Toast de Notificación -->
+    <div class="toast-notification" [class.show]="toastMessage" *ngIf="toastMessage">
+        <div class="toast-content">
+            {{ toastMessage }}
+        </div>
+    </div>
+
+    <!-- ── Sidebar ─────────────────────────────────────────────────── -->
+    <aside class="dashboard-sidebar">
+        <!-- Brand -->
+        <div class="sidebar-brand" (click)="goHome()">
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                <path d="M20 5L35 12.5V27.5L20 35L5 27.5V12.5L20 5Z" fill="url(#sb-grad)" />
+                <defs>
+                    <linearGradient id="sb-grad" x1="5" y1="5" x2="35" y2="35">
+                        <stop stop-color="#3B82F6" />
+                        <stop offset="1" stop-color="#60A5FA" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="sidebar-brand-name">NovaDrive</span>
+        </div>
+
+        <!-- User card -->
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">{{ firstName[0] }}</div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-user-name">{{ firstName }}</span>
+                <span class="sidebar-user-role">{{ user?.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+
+            <!-- SOLO CLIENTES -->
+            <button *ngIf="user?.role !== 'ADMIN'" class="sidebar-nav-item" [class.active]="activeSection === 'cars'" (click)="setSection('cars')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5" />
+                    <circle cx="16" cy="17" r="2" />
+                    <circle cx="9" cy="17" r="2" />
+                    <path d="M13 7H9m-6 4h17" />
+                </svg>
+                <span>Mis Autos</span>
+            </button>
+
+            <!-- SOLO ADMINS -->
+            <ng-container *ngIf="user?.role === 'ADMIN'">
+                <button class="sidebar-nav-item" [class.active]="activeSection === 'users'" (click)="setSection('users')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Gestión de Usuarios</span>
+                </button>
+                <button class="sidebar-nav-item" [class.active]="activeSection === 'sales'" (click)="setSection('sales')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Gestión de Ventas</span>
+                </button>
+                <button class="sidebar-nav-item" [class.active]="activeSection === 'products'" (click)="setSection('products')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    <span>Gestión de Productos</span>
+                </button>
+                <button class="sidebar-nav-item" [class.active]="activeSection === 'catalog'" (click)="setSection('catalog')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <span>Nuestros Productos</span>
+                </button>
+            </ng-container>
+
+            <button class="sidebar-nav-item" [class.active]="activeSection === 'profile'"
+                (click)="setSection('profile')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span>Mi Perfil</span>
+            </button>
+        </nav>
+
+        <!-- Sidebar footer -->
+        <div class="sidebar-footer">
+            <button class="sidebar-nav-item go-home-btn" (click)="goHome()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span>Ir al Inicio</span>
+            </button>
+
+            <button class="sidebar-nav-item logout-btn" (click)="logout()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ── Main Content ─────────────────────────────────────────────── -->
+    <main class="dashboard-main">
+
+        <!-- Top bar -->
+        <header class="dashboard-topbar">
+            <div class="topbar-greeting">
+                <h1 class="topbar-title">{{ greeting }}, <span class="gradient-text">{{ firstName }}</span> 👋</h1>
+                <p class="topbar-subtitle">{{ currentTime | date:'EEEE, d MMMM yyyy':'':'es' }} · Bienvenido a tu panel
+                </p>
+            </div>
+            <div class="topbar-actions">
+                <div class="topbar-user" (click)="setSection('profile')">
+                    <div class="topbar-avatar">{{ firstName[0] }}</div>
+                    <span>{{ user?.email }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ── PROFILE SECTION ────────────────────────── -->
+        <div *ngIf="activeSection === 'profile'" class="dashboard-content">
+            <div class="profile-wrapper">
+                <div class="profile-card">
+                    <div class="profile-bg-decoration"></div>
+                    <div class="profile-avatar-large">{{ firstName[0] }}</div>
+                    <h2 class="profile-name">{{ user?.fullName }}</h2>
+                    <span class="profile-role-badge">{{ user?.role === 'ADMIN' ? '⭐ Administrador' : '👤 Cliente'
+                        }}</span>
+
+                    <div class="profile-info-grid">
+                        <div class="profile-info-item">
+                            <span class="profile-info-label">Email</span>
+                            <span class="profile-info-value">{{ user?.email }}</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <span class="profile-info-label">Nombre completo</span>
+                            <span class="profile-info-value">{{ user?.fullName }}</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <span class="profile-info-label">Rol</span>
+                            <span class="profile-info-value">{{ user?.role }}</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <span class="profile-info-label">Estado</span>
+                            <span class="profile-info-value profile-active">✅ Cuenta activa</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-danger" (click)="logout()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── CARS SECTION (SOLO CLIENTES) ────────────────────────── -->
+        <div *ngIf="activeSection === 'cars' && user?.role !== 'ADMIN'" class="dashboard-content">
+            <div class="section-header-row">
+                <h2 class="dashboard-section-title">🚗 Mis Autos Comprados</h2>
+            </div>
+
+            <div class="dash-cars-grid" *ngIf="purchasedCars.length > 0">
+                <div class="dash-car-card" *ngFor="let car of purchasedCars">
+                    <div class="dash-car-image purchased">
+                        <img [src]="car.imagen" [alt]="car.name" />
+                        <span class="dash-car-badge purchase-tag">Propiedad</span>
+                    </div>
+                    <div class="dash-car-info">
+                        <h3 class="dash-car-name">{{ car.name }}</h3>
+                        <p class="dash-car-speed">⚡ {{ car.velocidad }} · {{ car.marca }}</p>
+                        <div class="dash-car-footer">
+                            <span class="purchase-date-label">Comprado en NovaDrive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" *ngIf="purchasedCars.length === 0">
+                <div class="empty-icon">🚗</div>
+                <h3>Aún no has comprado ningún auto</h3>
+                <p>Explora nuestro catálogo y adquiere el auto de tus sueños hoy mismo.</p>
+                <button class="btn btn-primary" (click)="goHome()">Ver Catálogo</button>
+            </div>
+        </div>
+
+        <!-- ── ADMIN CATALOG SECTION (solo vista, sin comprar) ─────────── -->
+        <div *ngIf="activeSection === 'catalog'" class="dashboard-content">
+            <div class="section-header-row">
+                <h2 class="dashboard-section-title">🏎️ Nuestros Productos</h2>
+                <p style="color:#64748B; margin-top:0.25rem;">Vista general del catálogo actual de NovaDrive</p>
+            </div>
+
+            <!-- Filtro por categoría -->
+            <div class="catalog-filter-row">
+                <button type="button" class="filter-chip" [class.active-chip]="catalogFilter === 'all'" (click)="catalogFilter = 'all'">Todos</button>
+                <button type="button" class="filter-chip" [class.active-chip]="catalogFilter === 'Sports'" (click)="catalogFilter = 'Sports'">Sports</button>
+                <button type="button" class="filter-chip" [class.active-chip]="catalogFilter === 'Supercar'" (click)="catalogFilter = 'Supercar'">Supercar</button>
+                <button type="button" class="filter-chip" [class.active-chip]="catalogFilter === 'Hypercar'" (click)="catalogFilter = 'Hypercar'">Hypercar</button>
+            </div>
+
+            <!-- Grid de productos (solo lectura) -->
+            <div class="admin-catalog-grid">
+                <div class="admin-catalog-card" *ngFor="let car of filteredAdminCatalog">
+                    <div class="admin-catalog-img">
+                        <img [src]="car.imagen" [alt]="car.name" onerror="this.src='https://via.placeholder.com/300x180?text=Sin+Imagen'">
+                        <span class="admin-catalog-badge" [class.badge-success]="car.status===1" [class.badge-warning]="car.status===0">
+                            {{ car.status === 1 ? 'Disponible' : 'Agotado' }}
+                        </span>
+                    </div>
+                    <div class="admin-catalog-info">
+                        <span class="admin-cat-tag">{{ car.categoria }}</span>
+                        <h3>{{ car.name }}</h3>
+                        <p class="admin-cat-meta">{{ car.marca }} &bull; {{ car.ao }}</p>
+                        <div class="admin-cat-specs" *ngIf="car.velocidad">
+                            <span>⚡ {{ car.velocidad }}</span>
+                            <span *ngIf="car.aceleracion">🏃 {{ car.aceleracion }}</span>
+                        </div>
+                        <div class="admin-cat-footer">
+                            <span class="admin-cat-price">{{ formatPrice(car.precio) }}</span>
+                            <span class="admin-cat-stock">Stock: {{ car.stock ?? 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" *ngIf="filteredAdminCatalog.length === 0">
+                <div class="empty-icon">🛒</div>
+                <h3>No hay productos en esta categoría</h3>
+            </div>
+        </div>
+
+        <!-- ── ADMIN USERS SECTION ────────────────────────── -->
+        <div *ngIf="activeSection === 'users'" class="dashboard-content">
+            <h2 class="dashboard-section-title">👥 Gestión de Usuarios</h2>
+            
+            <div class="admin-card">
+                <h3>{{ isEditingUser ? 'Editar Usuario' : 'Añadir Nuevo Usuario' }}</h3>
+                <div class="admin-form">
+                    <input type="text" [(ngModel)]="newUser.fullName" placeholder="Nombre completo" class="form-control">
+                    <input type="email" [(ngModel)]="newUser.email" placeholder="Correo electrónico" class="form-control">
+                    <input type="password" [(ngModel)]="newUser.password" placeholder="Contraseña (opcional para editar)" class="form-control">
+                    <select [(ngModel)]="newUser.role" class="form-control">
+                        <option value="USER">Cliente (USER)</option>
+                        <option value="ADMIN">Administrador (ADMIN)</option>
+                    </select>
+                    <div class="admin-form-actions">
+                        <button class="btn btn-primary" (click)="saveUser()">Guardar</button>
+                        <button *ngIf="isEditingUser" class="btn btn-outline-gray" style="margin-left:8px" (click)="resetUserForm()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let u of adminUsers">
+                            <td>{{u.id}}</td><td>{{u.fullName}}</td><td>{{u.email}}</td>
+                            <td><span class="badge" [class.badge-admin]="u.role==='ADMIN'">{{u.role}}</span></td>
+                            <td>
+                                <button class="btn btn-sm" (click)="editUser(u)">✏️</button>
+                                <button class="btn btn-sm btn-danger-text" (click)="deleteUser(u.id)">🗑️</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── ADMIN PRODUCTS SECTION ────────────────────────── -->
+        <div *ngIf="activeSection === 'products'" class="dashboard-content">
+            <h2 class="dashboard-section-title">🏷️ Gestión de Productos</h2>
+
+            <div class="admin-card">
+                <h3>Añadir Nuevo Producto</h3>
+                <div *ngIf="productFormError" class="admin-form-error">
+                    ⚠️ {{ productFormError }}
+                </div>
+                <div class="admin-form">
+                    <input type="text" [(ngModel)]="newProduct.name" placeholder="Nombre (ej. BMW X5)*" class="form-control">
+                    <input type="text" [(ngModel)]="newProduct.marca" placeholder="Marca*" class="form-control">
+                    <input type="number" [(ngModel)]="newProduct.precio" placeholder="Precio ($)*" class="form-control">
+                    <input type="number" [(ngModel)]="newProduct.ao" placeholder="Año*" class="form-control">
+                    <select [(ngModel)]="newProduct.categoria" class="form-control">
+                        <option value="">-- Selecciona categoría --</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Supercar">Supercar</option>
+                        <option value="Hypercar">Hypercar</option>
+                    </select>
+                    <input type="text" [(ngModel)]="newProduct.imagen" placeholder="URL Imagen*" class="form-control">
+                    <input type="number" [(ngModel)]="newProduct.stock" placeholder="En Stock*" class="form-control">
+                    <select [(ngModel)]="newProduct.status" class="form-control">
+                        <option [ngValue]="1">1 - Disponible</option>
+                        <option [ngValue]="0">0 - Agotado</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" (click)="addProduct()" [disabled]="isSavingProduct">
+                        {{ isSavingProduct ? 'Guardando...' : '+ Agregar Auto' }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-table-container" style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Auto</th><th>Marca / Año</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of adminProducts">
+                            <td>{{p.id}}</td>
+                            <td>
+                                <div><strong>{{p.name}}</strong></div>
+                                <div style="font-size:0.8rem; color:gray">{{p.categoria}}</div>
+                            </td>
+                            <td>{{p.marca}} ({{p.ao}})</td>
+                            <td>{{formatPrice(p.precio)}}</td>
+                            <td>{{p.stock}}</td>
+                            <td><span class="badge" [class.badge-success]="p.status===1" [class.badge-warning]="p.status===0">{{p.status === 1 ? 'Disponible' : 'Agotado'}}</span></td>
+                            <td>
+                                <button class="btn btn-sm" (click)="editProduct(p)">✏️</button>
+                                <button class="btn btn-sm btn-danger-text" (click)="deleteProduct(p.id!)">🗑️</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── ADMIN SALES SECTION ────────────────────────── -->
+        <div *ngIf="activeSection === 'sales'" class="dashboard-content">
+            <h2 class="dashboard-section-title">💰 Registro de Ventas</h2>
+            
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Cliente</th><th>Vehículo</th><th>Precio</th><th>Fecha</th><th>Estado</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of adminSales">
+                            <td>{{s.id}}</td>
+                            <td>
+                                <div><strong>{{s.user.fullName}}</strong></div>
+                                <div style="font-size: 0.75rem; color: #64748B;">{{s.user.email}}</div>
+                            </td>
+                            <td>
+                                <div><strong>{{s.car.name}}</strong></div>
+                                <div style="font-size: 0.75rem; color: #64748B;">{{s.car.marca}}</div>
+                            </td>
+                            <td>{{formatPrice(s.precioTotal)}}</td>
+                            <td>{{s.fechaVenta | date:'short':'':'es'}}</td>
+                            <td>
+                                <span class="badge" [class.badge-success]="s.status === 1" [class.badge-warning]="s.status === 0">
+                                    {{ s.status === 1 ? 'Vendido' : 'Pendiente' }}
+                                </span>
+                            </td>
+                            <td>
+                                <!-- Botón eliminar removido por requerimiento: el admin no debe poder eliminar ventas -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" *ngIf="adminSales.length === 0">
+                <div class="empty-icon">📊</div>
+                <h3>Aún no hay ventas registradas</h3>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── MODAL DE EDICIÓN DE PRODUCTO ────────────────────────────────── -->
+<div class="edit-modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+    <div class="edit-modal" (click)="$event.stopPropagation()">
+        <div class="edit-modal-header">
+            <h3>✏️ Editar Auto</h3>
+            <button class="edit-modal-close" (click)="closeEditModal()">✕</button>
+        </div>
+        <div class="edit-modal-body">
+            <!-- Success Message after update -->
+            <div class="update-success-overlay" *ngIf="updateSuccess">
+                <div class="success-content">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <h3>Cambios realizados</h3>
+                    <p>La información del auto ha sido actualizada correctamente.</p>
+                </div>
+            </div>
+
+            <div class="edit-modal-grid" *ngIf="!updateSuccess">
+                <div class="edit-field">
+                    <label>Nombre</label>
+                    <input type="text" [(ngModel)]="editingProduct.name" class="form-control" placeholder="Nombre del auto">
+                </div>
+                <div class="edit-field">
+                    <label>Marca</label>
+                    <input type="text" [(ngModel)]="editingProduct.marca" class="form-control" placeholder="Marca">
+                </div>
+                <div class="edit-field">
+                    <label>Precio ($)</label>
+                    <input type="number" [(ngModel)]="editingProduct.precio" class="form-control">
+                </div>
+                <div class="edit-field">
+                    <label>Año</label>
+                    <input type="number" [(ngModel)]="editingProduct.ao" class="form-control">
+                </div>
+                <div class="edit-field">
+                    <label>Categoría</label>
+                    <select [(ngModel)]="editingProduct.categoria" class="form-control">
+                        <option value="Sports">Sports</option>
+                        <option value="Supercar">Supercar</option>
+                        <option value="Hypercar">Hypercar</option>
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label>Stock</label>
+                    <input type="number" [(ngModel)]="editingProduct.stock" class="form-control">
+                </div>
+                <div class="edit-field">
+                    <label>Velocidad</label>
+                    <input type="text" [(ngModel)]="editingProduct.velocidad" class="form-control" placeholder="ej. 320 km/h">
+                </div>
+                <div class="edit-field">
+                    <label>Aceleración</label>
+                    <input type="text" [(ngModel)]="editingProduct.aceleracion" class="form-control" placeholder="ej. 0-100 in 2.8s">
+                </div>
+                <div class="edit-field edit-field-full">
+                    <label>URL de Imagen</label>
+                    <input type="text" [(ngModel)]="editingProduct.imagen" class="form-control" placeholder="https://...">
+                </div>
+                <div class="edit-field">
+                    <label>Estado</label>
+                    <select [(ngModel)]="editingProduct.status" class="form-control">
+                        <option [ngValue]="1">Disponible</option>
+                        <option [ngValue]="0">Agotado</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="edit-modal-footer" *ngIf="!updateSuccess">
+            <button type="button" class="btn btn-outline-gray" (click)="closeEditModal()" [disabled]="isUpdatingProduct">Cancelar</button>
+            <button type="button" class="btn btn-primary" (click)="updateProduct()" [disabled]="isUpdatingProduct">
+                <span *ngIf="isUpdatingProduct">Guardando...</span>
+                <span *ngIf="!isUpdatingProduct">💾 Guardar Cambios</span>
+            </button>
+        </div>
+    </div>
+</div>
