@@ -19,8 +19,11 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Orígenes permitidos (frontend Angular)
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Orígenes permitidos (frontend Angular en localhost y Vercel)
+        config.setAllowedOriginPatterns(List.of(
+            "http://localhost:4200",
+            "https://*.vercel.app"
+        ));
 
         // Métodos HTTP permitidos
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
