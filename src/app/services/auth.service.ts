@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 export interface AuthResponse {
     success: boolean;
@@ -38,7 +39,7 @@ export interface UserSession {
 })
 export class AuthService {
 
-    private readonly API_URL = 'http://localhost:8081/api/auth';
+    private readonly API_URL = `${API_CONFIG.getBaseUrl()}/api/auth`;
     private readonly SESSION_KEY = 'novadrive_session';
     private readonly PURCHASED_CARS_KEY = 'novadrive_purchased_cars';
 

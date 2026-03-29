@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 export interface Car {
     id?: number;
@@ -21,7 +22,7 @@ export interface Car {
 })
 export class CarService {
 
-    private readonly API_URL = 'http://localhost:8081/api/cars';
+    private readonly API_URL = `${API_CONFIG.getBaseUrl()}/api/cars`;
 
     // Cache reactivo: cualquier componente puede suscribirse a la lista de autos
     private carsSubject = new BehaviorSubject<Car[]>([]);

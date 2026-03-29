@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 import { Car } from './car.service';
 
 export interface Venta {
@@ -22,7 +23,7 @@ export interface VentaRequest {
 })
 export class VentaService {
 
-    private readonly API_URL = 'http://localhost:8081/api/ventas';
+    private readonly API_URL = `${API_CONFIG.getBaseUrl()}/api/ventas`;
 
     constructor(private http: HttpClient) { }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 export interface AdminUser {
     id?: number;
@@ -15,7 +16,7 @@ export interface AdminUser {
 })
 export class UserService {
 
-    private readonly API_URL = 'http://localhost:8081/api/users';
+    private readonly API_URL = `${API_CONFIG.getBaseUrl()}/api/users`;
 
     constructor(private http: HttpClient) { }
 
